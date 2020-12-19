@@ -1,0 +1,26 @@
+# name: Test Lab
+graph test_lab {
+    # name: Parking Lot
+    parking_lot
+
+    # name: Hallway
+    hallway
+
+    # name: Test Chamber
+    test_chamber
+
+    # name: Observation Room
+    obs
+
+    # name: Server Room
+    servers
+
+    parking_lot -- hallway
+    hallway -- obs
+    hallway -- servers
+
+    obs -- test_chamber
+    obs -- servers
+
+
+}

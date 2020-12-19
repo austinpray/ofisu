@@ -1,0 +1,17 @@
+graph my_office {
+    # name: Parking Lot
+    parking_lot
+
+    # name: Reception Area
+    reception
+
+    # name: My Office
+    my_office
+
+    # name: Your Office
+    your_office
+
+    parking_lot -- reception
+    reception -- my_office
+    reception -- your_office
+}

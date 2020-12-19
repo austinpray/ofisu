@@ -1,3 +1,15 @@
+# secrets
+.env*
+!/.env.example
+
+/deploy/secrets.yaml
+
+# redis mounted volume
+/redis
+
+# binary
+/ofisu
+
 # Binaries for programs and plugins
 *.exe
 *.exe~

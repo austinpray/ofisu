@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ofisu
+  name: ofisu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ofisu
+  template:
+    metadata:
+      labels:
+        app: ofisu
+    spec:
+      containers:
+        - name: ofisu
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "245Mi"
+            limits:
+              cpu: "2"
+              memory: "1G"
+          command:
+            - ofisu
+          args:
+            - discord-manager
+            - "--offices=/usr/local/share/ofisu/offices.d"
+          envFrom:
+            - secretRef:
+                name: ofisu-env
+          volumeMounts:
+            - name: offices
+              mountPath: "/usr/local/share/ofisu/offices.d"
+              readOnly: true
+          # TODO: pin this and enable automated deploys
+          image: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu:fb4db7eb5a9164d5e353a3c79a37c1708748b0c2
+          imagePullPolicy: Always
+      volumes:
+        - name: offices
+          configMap:
+            name: offices
+      restartPolicy: Always
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: ofisu-rec-vpa
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: ofisu
+  updatePolicy:
+    updateMode: "Off"

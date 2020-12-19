@@ -1,0 +1,92 @@
+# name: AWNAM Office
+graph awnam {
+
+    # name: Men's Bathroom
+    bathroom_men
+
+    # name: Women's Bathroom
+    bathroom_women
+
+    # name: Break Room
+    # voice: enabled
+    # has: snes
+    # has: gamecube
+    # has: fat-ps3
+    break
+
+    # name: Conference Room
+    # voice: enabled
+    conference
+
+    # empty_a
+    # empty_b
+    # empty_d
+    # empty_e
+    # empty_f
+    # empty_g
+    # empty_n
+
+    # name: Frizzle's Office
+    frizzle_office
+
+    # name: East Hallway
+    hallway_east
+
+    # name: North Hallway
+    hallway_north
+
+    # name: West Hallway
+    hallway_west
+
+    # name: Hayden's Office
+    hayden_office
+
+    # name: Nfinity's Office
+    nfinity_office
+
+    # name: Parking Lot
+    parking_lot
+
+    # name: Reception Area
+    reception
+
+    # name: Silk-nyan's Office
+    silknyan_office
+
+    # name: Storage Closet
+    storage
+
+    # name: Spooky Unknown Room
+    unknown
+
+    # name: Zushi's office
+    zushi_office
+
+    parking_lot -- reception
+    reception -- hallway_west
+    reception -- hallway_east
+    hallway_west -- hallway_north
+    hallway_east -- hallway_north
+
+    # reception -- empty_a
+    # reception -- empty_b
+    reception -- hayden_office
+    reception -- conference
+    # reception -- empty_n
+    reception -- frizzle_office
+
+    # hallway_west -- empty_d
+    # hallway_west -- empty_e
+    # hallway_west -- empty_f
+    # hallway_west -- empty_g
+
+    hallway_north -- nfinity_office
+    hallway_north -- storage
+    hallway_north -- break
+    hallway_north -- zushi_office
+    hallway_north -- unknown
+
+    hallway_east -- silknyan_office
+    hallway_east -- bathroom_men
+    hallway_east -- bathroom_women
+}

@@ -1,0 +1,14 @@
+namespace: ofisu
+resources:
+  - namespace.yaml
+  - ofisu-deployment.yaml
+
+configMapGenerator:
+  - name: offices
+    files:
+      - ./offices/awnam.dot
+      - ./offices/test_lab.dot
+
+secretGenerator:
+  - name: ofisu-env
+    env: .env.production
