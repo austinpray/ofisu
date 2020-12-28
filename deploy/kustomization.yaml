@@ -19,4 +19,4 @@ secretGenerator:
 
 images:
 - name: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu
-  newTag: mvp-5f26d662c42b927c3157a4296115be90a9a30015
+  newTag: mvp-9c5fc8e8f77f64ae90ce539d40095356e55b1526
