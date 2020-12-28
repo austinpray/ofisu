@@ -726,7 +726,7 @@ func (c *Controller) syncUsers(ctx context.Context, state RemoteState) error {
 					currentRoom.Name,
 					desiredRoom.Name,
 				)
-				{
+				if channel.Type == discordgo.ChannelTypeGuildText {
 					_, err := c.Session.ChannelMessageSend(channel.ID, msg)
 					if err != nil {
 						return fmt.Errorf("failed to send leave message: %v", err)
@@ -749,7 +749,7 @@ func (c *Controller) syncUsers(ctx context.Context, state RemoteState) error {
 					user.Mention(),
 					desiredRoom.Name,
 				)
-				{
+				if channel.Type == discordgo.ChannelTypeGuildText {
 					_, err := c.Session.ChannelMessageSend(channel.ID, msg)
 					if err != nil {
 						return fmt.Errorf("failed to send leave message: %v", err)
