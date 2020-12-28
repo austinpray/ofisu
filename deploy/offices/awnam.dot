@@ -19,11 +19,15 @@ graph awnam {
     conference
 
     # empty_a
-    # empty_b
+    # name: Matto's Office
+    matto_office
     # empty_d
     # empty_e
     # empty_f
-    # empty_g
+
+    # name: Kellogg's Office
+    kellogg_office
+
     # empty_n
 
     # name: Frizzle's Office
@@ -69,7 +73,7 @@ graph awnam {
     hallway_east -- hallway_north
 
     # reception -- empty_a
-    # reception -- empty_b
+    reception -- matt_office
     reception -- hayden_office
     reception -- conference
     # reception -- empty_n
@@ -78,7 +82,7 @@ graph awnam {
     # hallway_west -- empty_d
     # hallway_west -- empty_e
     # hallway_west -- empty_f
-    # hallway_west -- empty_g
+    hallway_west -- kelly_office
 
     hallway_north -- nfinity_office
     hallway_north -- storage
