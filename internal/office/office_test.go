@@ -19,8 +19,8 @@ func TestFromFile(t *testing.T) {
 		t.Errorf("expected office id to be awnam_office but got %v", office.ID)
 	}
 
-	if len(office.Edges) != 16 {
-		t.Errorf("expected office to have 23 edges but got %v", len(office.Edges))
+	if len(office.Edges) != 18 {
+		t.Errorf("expected office to have 18 edges but got %v", len(office.Edges))
 	}
 
 	if office.Edges["parking_lot"][0] != "reception" {
@@ -55,5 +55,13 @@ func TestFromFile(t *testing.T) {
 
 	if len(office.Edges["parking_lot"]) != 1 {
 		t.Errorf("too many edges on parking lot")
+	}
+
+	candidates := office.GetMoveCandidates("hallway_east", "men's bathroom")
+	if len(candidates) != 1 {
+		t.Errorf("expected only one move candidate %v", candidates)
+	}
+	if candidates[0].ID != "bathroom_men" {
+		t.Errorf("should have matched bathroom_men but got %v", candidates[0].ID)
 	}
 }

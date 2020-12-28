@@ -44,19 +44,27 @@ func (o *Office) GetMoveCandidates(from string, desired string) []Room {
 	adjacentRooms := o.GetAdjacentRooms(from)
 	candidates := []Room{}
 
+	// look for prefixes
 	for _, adj := range adjacentRooms {
 		roomName := normalizeOfficeName(adj.Name)
 		if strings.HasPrefix(roomName, desired) {
 			candidates = append(candidates, adj)
-			continue
 		}
+	}
+
+	if len(candidates) > 0 {
+		return candidates
+	}
+
+	// no prefixes, try looking for mispellings
+	for _, adj := range adjacentRooms {
+		roomName := normalizeOfficeName(adj.Name)
 
 		// TODO: will need to tweak this
 		// https://git.io/JLyEX
 		threshold := int(math.Ceil(float64(len(roomName)) * 0.25))
 		if levenshtein.ComputeDistance(desired, roomName) <= threshold {
 			candidates = append(candidates, adj)
-			continue
 		}
 	}
 
