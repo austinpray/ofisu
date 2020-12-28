@@ -60,9 +60,12 @@ func (s *RemoteState) requestSync() {
 	s.channelsSynced = time.Time{}
 	s.usersSynced = time.Time{}
 }
+
+/*
 func (s *RemoteState) requestChannelSync() {
 	s.channelsSynced = time.Time{}
 }
+*/
 func (s *RemoteState) requestUserSync() {
 	s.usersSynced = time.Time{}
 }
@@ -180,8 +183,19 @@ var cmdLook = regexp.MustCompile(`(?i)^l(?:ook)?$`)
 func (c *Controller) MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate, content string) {
 	ctx := context.Background()
 
+	somethingWentWrongSadface := func(err error) {
+		fmt.Println(err)
+		{
+			msg := "something went wrong :("
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s %s", m.Author.Mention(), msg))
+			if err != nil {
+				fmt.Println("I heard you like errors: " + err.Error())
+			}
+		}
+	}
+
 	if cmdHelp.MatchString(content) {
-		s.ChannelMessageSend(m.ChannelID, `help:
+		_, err := s.ChannelMessageSend(m.ChannelID, `help:
 __global commands__
 "help" => this message
 "go to office" => puts you in the parking lot of the office
@@ -197,20 +211,13 @@ __admin commands__
 "!install <office>" => initializes an office on your server, NOTE: this will completely reset your office
 "!uninstall" => removes the office from your server, NOTE: this completely deletes all state
 `)
+		if err != nil {
+			somethingWentWrongSadface(err)
+		}
 
 		return
 	}
 
-	somethingWentWrongSadface := func(err error) {
-		fmt.Println(err)
-		{
-			msg := "something went wrong :("
-			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s %s", m.Author.Mention(), msg))
-			if err != nil {
-				fmt.Println("I heard you like errors: " + err.Error())
-			}
-		}
-	}
 	action := func(msg string) {
 		_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("*%s %s*", m.Author.Mention(), msg))
 		if err != nil {
@@ -555,9 +562,12 @@ func (c *Controller) syncChannels(ctx context.Context, state RemoteState) error 
 			topic = room.Name
 		}
 		if channel.Topic != topic {
-			c.Session.ChannelEditComplex(channel.ID, &discordgo.ChannelEdit{
+			_, err := c.Session.ChannelEditComplex(channel.ID, &discordgo.ChannelEdit{
 				Topic: topic,
 			})
+			if err != nil {
+				return err
+			}
 		}
 
 		// ensure permissions are correct
@@ -566,13 +576,16 @@ func (c *Controller) syncChannels(ctx context.Context, state RemoteState) error 
 				continue
 			}
 			if permissionOverwrite.Deny != privateChannelOverwrite.Deny {
-				c.Session.ChannelPermissionSet(
+				err := c.Session.ChannelPermissionSet(
 					channel.ID,
 					privateChannelOverwrite.ID,
 					privateChannelOverwrite.Type,
 					0,
 					privateChannelOverwrite.Deny,
 				)
+				if err != nil {
+					return err
+				}
 			}
 		}
 
@@ -713,7 +726,12 @@ func (c *Controller) syncUsers(ctx context.Context, state RemoteState) error {
 					currentRoom.Name,
 					desiredRoom.Name,
 				)
-				c.Session.ChannelMessageSend(channel.ID, msg)
+				{
+					_, err := c.Session.ChannelMessageSend(channel.ID, msg)
+					if err != nil {
+						return fmt.Errorf("failed to send leave message: %v", err)
+					}
+				}
 
 				err := c.Session.ChannelPermissionDelete(channel.ID, userID)
 				if err != nil {
@@ -731,7 +749,12 @@ func (c *Controller) syncUsers(ctx context.Context, state RemoteState) error {
 					user.Mention(),
 					desiredRoom.Name,
 				)
-				c.Session.ChannelMessageSend(channel.ID, msg)
+				{
+					_, err := c.Session.ChannelMessageSend(channel.ID, msg)
+					if err != nil {
+						return fmt.Errorf("failed to send leave message: %v", err)
+					}
+				}
 				continue
 			}
 		}

@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"sync"
@@ -9,6 +10,7 @@ import (
 	"github.com/austinpray/ofisu/internal/office"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
+	"golang.org/x/sync/errgroup"
 )
 
 /*
@@ -78,7 +80,10 @@ func (cm *ControllerManager) guildCreate(s *discordgo.Session, m *discordgo.Guil
 	cm.controllersMu.Lock()
 	guild := cm.addGuildController(m.Guild.ID)
 	cm.controllersMu.Unlock()
-	guild.Sync()
+	err := guild.Sync()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 func (cm *ControllerManager) guildDelete(s *discordgo.Session, m *discordgo.GuildDelete) {
 	cm.controllersMu.Lock()
@@ -113,7 +118,7 @@ func (cm *ControllerManager) removeGuildController(guildID string) {
 }
 
 func (cm *ControllerManager) SyncGuilds() {
-	if time.Now().Sub(cm.guildsSynced) >= 12*time.Minute {
+	if time.Since(cm.guildsSynced) >= 12*time.Minute {
 		// TODO: hardcoded 100 guild limit
 		guilds, err := cm.Session.UserGuilds(100, "", "")
 		if err != nil {
@@ -144,7 +149,13 @@ func (cm *ControllerManager) SyncGuilds() {
 	cm.controllersMu.RLock()
 	defer cm.controllersMu.RUnlock()
 
+	// TODO: timeout?
+	ctx := context.Background()
+	g, _ := errgroup.WithContext(ctx)
 	for _, controller := range cm.Controllers {
-		go controller.Sync()
+		g.Go(controller.Sync)
+	}
+	if err := g.Wait(); err != nil {
+		fmt.Println(err)
 	}
 }

@@ -27,7 +27,7 @@ func TestFromFile(t *testing.T) {
 		t.Errorf("parking lot should connect to reception")
 	}
 
-	reception, _ := office.Edges["reception"]
+	reception := office.Edges["reception"]
 
 	seenFrizzle := false
 	for _, edge := range reception {

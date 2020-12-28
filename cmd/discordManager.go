@@ -27,7 +27,7 @@ var discordManagerCmd = &cobra.Command{
 	Short: "Adds an office to a discord server",
 	Run: func(cmd *cobra.Command, args []string) {
 		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 		logger.Println("starting discord-controller")
 
 		// TODO support multiple offices
