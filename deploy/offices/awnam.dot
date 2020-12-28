@@ -73,7 +73,7 @@ graph awnam {
     hallway_east -- hallway_north
 
     # reception -- empty_a
-    reception -- matt_office
+    reception -- matto_office
     reception -- hayden_office
     reception -- conference
     # reception -- empty_n
@@ -82,7 +82,7 @@ graph awnam {
     # hallway_west -- empty_d
     # hallway_west -- empty_e
     # hallway_west -- empty_f
-    hallway_west -- kelly_office
+    hallway_west -- kellogg_office
 
     hallway_north -- nfinity_office
     hallway_north -- storage
