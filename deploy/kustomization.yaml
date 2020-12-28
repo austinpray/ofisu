@@ -3,20 +3,20 @@ kind: Kustomization
 
 namespace: ofisu
 resources:
-- namespace.yaml
-- ofisu-deployment.yaml
+    - namespace.yaml
+    - ofisu-deployment.yaml
 
 configMapGenerator:
-- files:
-  - ./offices/awnam.dot
-  - ./offices/test_lab.dot
-  name: offices
+    - files:
+          - ./offices/awnam.dot
+          - ./offices/test_lab.dot
+      name: offices
 
 secretGenerator:
-- envs:
-  - .env.production
-  name: ofisu-env
+    - envs:
+          - .env.production
+      name: ofisu-env
 
 images:
-- name: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu
-  newTag: mvp-5b9e439781b60c0d54263bc560d7fe65ea124c15
+    - name: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu
+      newTag: mvp-5b9e439781b60c0d54263bc560d7fe65ea124c15

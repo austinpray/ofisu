@@ -1,27 +1,27 @@
 version: "3"
 
 services:
-  ofisu:
-    build:
-        context: ./
-        dockerfile: containers/ofisu/Dockerfile
-        args:
-            GOFLAGS: -race
-    image: "${OFISU_CONTAINER_NAME:-ofisu}"
-    command: ["ofisu", "discord-manager", "--offices=./deploy/offices"]
-    env_file: .env
-    environment:
-      PORT: 8080
-      OFISU_REDIS_URL: redis://redis:6379/
-    volumes:
-      - ./:/usr/local/ofisu
-    ports:
-      - "8080:8080"
-    depends_on:
-        - redis
-  redis:
-    image: redis:5
-    volumes:
-      - ./redis:/data
-    ports:
-      - "6379:6379"
+    ofisu:
+        build:
+            context: ./
+            dockerfile: containers/ofisu/Dockerfile
+            args:
+                GOFLAGS: -race
+        image: "${OFISU_CONTAINER_NAME:-ofisu}"
+        command: ["ofisu", "discord-manager", "--offices=./deploy/offices"]
+        env_file: .env
+        environment:
+            PORT: 8080
+            OFISU_REDIS_URL: redis://redis:6379/
+        volumes:
+            - ./:/usr/local/ofisu
+        ports:
+            - "8080:8080"
+        depends_on:
+            - redis
+    redis:
+        image: redis:5
+        volumes:
+            - ./redis:/data
+        ports:
+            - "6379:6379"

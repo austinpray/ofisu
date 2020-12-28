@@ -1,28 +1,27 @@
 name: Go
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
+            - name: Bogus .env
+              run: cp .env.example .env
 
-    - name: Bogus .env
-      run: cp .env.example .env
+            - name: Build
+              run: docker-compose build
 
-    - name: Build
-      run: docker-compose build
+            - name: Test
+              run: docker-compose run --rm --no-deps ofisu go test -v -race ./...
 
-    - name: Test
-      run: docker-compose run --rm --no-deps ofisu go test -v -race ./...
-
-    - name: golangci-lint
-      uses: reviewdog/action-golangci-lint@v1
+            - name: golangci-lint
+              uses: reviewdog/action-golangci-lint@v1
