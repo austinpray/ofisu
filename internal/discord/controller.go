@@ -239,8 +239,8 @@ __admin commands__
 	}
 
 	// we stateful from here, just lock
-	c.stateMu.RLock()
-	defer c.stateMu.RUnlock()
+	c.stateMu.Lock()
+	defer c.stateMu.Unlock()
 
 	installedOffice := c.state.Office
 
