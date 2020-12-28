@@ -37,7 +37,7 @@ spec:
               mountPath: "/usr/local/share/ofisu/offices.d"
               readOnly: true
           # TODO: pin this and enable automated deploys
-          image: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu:fb4db7eb5a9164d5e353a3c79a37c1708748b0c2
+          image: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu:PLACEHOLDER
           imagePullPolicy: Always
       volumes:
         - name: offices

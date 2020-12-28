@@ -1,14 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 namespace: ofisu
 resources:
-  - namespace.yaml
-  - ofisu-deployment.yaml
+- namespace.yaml
+- ofisu-deployment.yaml
 
 configMapGenerator:
-  - name: offices
-    files:
-      - ./offices/awnam.dot
-      - ./offices/test_lab.dot
+- files:
+  - ./offices/awnam.dot
+  - ./offices/test_lab.dot
+  name: offices
 
 secretGenerator:
-  - name: ofisu-env
-    env: .env.production
+- envs:
+  - .env.production
+  name: ofisu-env
+
+images:
+- name: us.gcr.io/kizuna-188702/github.com/austinpray/ofisu
+  newTag: mvp-3302912b41524cae16509fa4e00f410e5dc7dfaa

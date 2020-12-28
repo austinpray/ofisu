@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  tools:
+    build: ./containers/tools
+    image: ofisu-tools
+    volumes:
+      - ./:/app

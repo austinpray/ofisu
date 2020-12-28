@@ -5,4 +5,4 @@ OFFICE_GRAPHS_IMG = $(OFFICE_GRAPHS:.dot=.png)
 default: $(OFFICE_GRAPHS_IMG)
 
 deploy/offices/%.png: deploy/offices/%.dot
-	docker-compose run --rm --no-deps ofisu dot $< -Tpng -o $@
+	docker-compose -f docker-compose.tools.yml run --rm --no-deps tools dot $< -Tpng -o $@
