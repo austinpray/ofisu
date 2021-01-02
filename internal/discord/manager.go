@@ -37,6 +37,12 @@ func (cm *ControllerManager) AttachHandlers() {
 	cm.Session.AddHandler(cm.guildCreate)
 	cm.Session.AddHandler(cm.guildDelete)
 }
+func (cm *ControllerManager) addMember(s *discordgo.Session, e *discordgo.GuildMemberAdd) {
+	cm.controllersMu.RLock()
+	defer cm.controllersMu.RUnlock()
+	controller = cm.Controllers[e.GuildID]
+
+}
 
 func (cm *ControllerManager) messageRouter(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore all messages created by the bot itself
@@ -147,7 +153,6 @@ func (cm *ControllerManager) SyncGuilds() {
 	}
 
 	cm.controllersMu.RLock()
-	defer cm.controllersMu.RUnlock()
 
 	// TODO: timeout?
 	ctx := context.Background()
@@ -155,6 +160,9 @@ func (cm *ControllerManager) SyncGuilds() {
 	for _, controller := range cm.Controllers {
 		g.Go(controller.Sync)
 	}
+
+	cm.controllersMu.RUnlock()
+
 	if err := g.Wait(); err != nil {
 		fmt.Println(err)
 	}

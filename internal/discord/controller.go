@@ -59,6 +59,7 @@ type RemoteState struct {
 func (s *RemoteState) requestSync() {
 	s.channelsSynced = time.Time{}
 	s.usersSynced = time.Time{}
+	s.membersSynced = time.Time{}
 }
 
 /*
